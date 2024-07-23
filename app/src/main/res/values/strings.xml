@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Management App Task</string>
+    <string name="add_user">Add User</string>
+    <string name="no_data_placeholder">No Details</string>
+
+</resources>
+

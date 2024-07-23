@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UserCreationActivity">
+
+    <TextView
+        android:id="@+id/tvTaskCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tasks Count: 0"
+        android:textSize="18sp"
+        android:layout_margin="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:id="@+id/etFirstName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter First Name"
+        android:layout_below="@id/tvTaskCount"
+        android:layout_margin="16dp" />
+
+    <EditText
+        android:id="@+id/etTasks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Tasks (one per line)"
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:layout_below="@id/etFirstName"
+        android:layout_margin="16dp" />
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_below="@id/etTasks"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
+</RelativeLayout>
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<LinearLayout-->
+    <!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="match_parent"-->
+    <!--    android:orientation="vertical"-->
+    <!--    android:padding="16dp">-->
+
+    <!--    <EditText-->
+    <!--        android:id="@+id/etFirstName"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:hint="First Name"-->
+    <!--        android:padding="8dp"-->
+    <!--        android:layout_marginBottom="16dp"-->
+    <!--        android:background="@drawable/edittext_background"-->
+    <!--        android:textSize="16sp"/>-->
+
+    <!--    <EditText-->
+    <!--        android:id="@+id/etTasks"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:hint="Tasks (one per line)"-->
+    <!--        android:padding="8dp"-->
+    <!--        android:layout_marginBottom="16dp"-->
+    <!--        android:background="@drawable/edittext_background"-->
+    <!--        android:textSize="16sp"/>-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/tvTaskCount"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="Tasks Count: 0"-->
+    <!--        android:textSize="16sp"-->
+    <!--        android:layout_marginBottom="16dp"/>-->
+
+    <!--    <Button-->
+    <!--        android:id="@+id/btnSubmit"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="Submit"-->
+    <!--        android:padding="16dp"-->
+    <!--        android:background="@drawable/button_background"-->
+    <!--        android:textSize="16sp"/>-->
+
+    <!--</LinearLayout>-->
