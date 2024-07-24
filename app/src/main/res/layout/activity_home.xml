@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -36,6 +37,63 @@
             android:layout_height="wrap_content"
             android:stretchColumns="0,1,2,3,4"
             android:visibility="gone">
+
+            <!-- Table Header -->
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Name"
+                    android:padding="8dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:text="Tasks"
+                    android:padding="8dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:text="Tasks Count"
+                    android:padding="8dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:text="Edit"
+                    android:padding="8dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
+
+                <TextView
+                    android:text="Delete"
+                    android:padding="8dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    android:background="@android:color/darker_gray"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
+            </TableRow>
+
         </TableLayout>
     </ScrollView>
 
@@ -48,3 +106,6 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="16dp" />
 </RelativeLayout>
+
+
+

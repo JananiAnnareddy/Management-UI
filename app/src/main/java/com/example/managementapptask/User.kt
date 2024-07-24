@@ -8,4 +8,5 @@ import androidx.room.PrimaryKey
 data class User(
     @PrimaryKey val phoneNumber: String,
     val name: String
+
 )
