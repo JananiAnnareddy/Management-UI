@@ -2,14 +2,25 @@ package com.example.managementapptask
 
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
+
 
 @Dao
 interface UserDao {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(user: User)
+    @Insert
+     fun insertUser(user: User)
 
-    @Query("SELECT * FROM users WHERE name = :name AND phoneNumber = :phoneNumber LIMIT 1")
-    fun getUser(name: String, phoneNumber: String): User?
+    @Query("SELECT * FROM users WHERE username = :username AND mobile_number = :mobileNumber")
+    fun getUser(username: String, mobileNumber: String): User?
 }
+
+@Dao
+interface TaskDao {
+    @Insert
+    fun insertTask(task: Task)
+
+    @Query("SELECT * FROM tasks WHERE user_id = :userId")
+     fun getTasksByUserId(userId: Int): List<Task>
+}
+
+

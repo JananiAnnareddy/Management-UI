@@ -5,6 +5,35 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
+    <!-- Toolbar for the title bar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home Page"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:layout_gravity="center"/>
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- ImageView for background image -->
+    <ImageView
+        android:id="@+id/imgBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/notasksimage"
+        android:scaleType="centerCrop"
+        android:layout_below="@id/toolbar"
+        android:visibility="visible" />
+
     <TextView
         android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
@@ -12,90 +41,9 @@
         android:text="Welcome, User!"
         android:textSize="24sp"
         android:layout_margin="16dp"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/toolbar"
         android:layout_centerHorizontal="true" />
 
-    <ImageView
-        android:id="@+id/imgNoDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/dataimage"
-        android:layout_below="@id/tvWelcome"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
-        android:visibility="visible" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvWelcome"
-        android:layout_margin="16dp">
-
-        <TableLayout
-            android:id="@+id/tableLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:stretchColumns="0,1,2,3,4"
-            android:visibility="gone">
-
-            <!-- Table Header -->
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:text="Name"
-                    android:padding="8dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:text="Tasks"
-                    android:padding="8dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:text="Tasks Count"
-                    android:padding="8dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:text="Edit"
-                    android:padding="8dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5" />
-
-                <TextView
-                    android:text="Delete"
-                    android:padding="8dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="18sp"
-                    android:background="@android:color/darker_gray"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5" />
-            </TableRow>
-
-        </TableLayout>
-    </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddUser"
@@ -106,6 +54,3 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="16dp" />
 </RelativeLayout>
-
-
-

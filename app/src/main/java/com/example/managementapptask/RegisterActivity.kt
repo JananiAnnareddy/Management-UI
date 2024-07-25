@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,6 +22,10 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
+        val toolbar: Toolbar = findViewById(R.id.registerToolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = "Registration Page"
+
         etName = findViewById(R.id.etName)
         etPhoneNumber = findViewById(R.id.etPhoneNumber)
         btnRegister = findViewById(R.id.btnRegister)
@@ -33,9 +38,9 @@ class RegisterActivity : AppCompatActivity() {
             val phoneNumber = etPhoneNumber.text.toString()
 
             if (name.isNotEmpty() && phoneNumber.isNotEmpty()) {
-                val user = User(name, phoneNumber)
+                val user = User(username = name, mobileNumber = phoneNumber)
                 CoroutineScope(Dispatchers.IO).launch {
-                    userDao.insert(user)
+                    userDao.insertUser(user)
                     runOnUiThread {
                         Toast.makeText(this@RegisterActivity, "Registration Successful", Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
