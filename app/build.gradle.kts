@@ -53,5 +53,7 @@ dependencies {
     implementation(libs.core)
     implementation(libs.lifecycle)
     implementation(libs.viewmodel)
+    implementation(libs.gson)
+    implementation(libs.grid)
 
 }

@@ -2,6 +2,24 @@
     <string name="app_name">Management App Task</string>
     <string name="add_user">Add User</string>
     <string name="no_data_placeholder">No Details</string>
+    <string name="name">Name</string>
+    <string name="please_login_to_continue">Please login to continue</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="phone_number">Mobile Number</string>
+    <string name="enter_phone_number">Enter Mobile Number</string>
+    <string name="create_account">Create Account</string>
+    <string name="user_role">User Role</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="dont_have_an_account">Dont have an account?</string>
+    <string name="registration">Registration</string>
+    <string name="already_have_a_account">Already have a account? </string>
+    <string name="user_creation_detail">User Creation Detail</string>
+    <string name="enter_username">Enter Username</string>
+    <string name="enter_mobile_number">Enter Mobile Number</string>
+    <string name="add_task">Add Task</string>
+    <string name="submit">Submit</string>
+
 
 </resources>
 

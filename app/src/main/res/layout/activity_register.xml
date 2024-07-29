@@ -1,38 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:padding="16dp"
     tools:context=".RegisterActivity">
 
-
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/registerToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/registerToolbarbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        android:titleTextColor="@android:color/white"
-        android:gravity="center"/>
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/registration"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+    </androidx.appcompat.widget.Toolbar>
 
-    <EditText
-        android:id="@+id/etName"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/formContainer"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Name" />
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/registerToolbarbar"
+        app:layout_constraintVertical_bias="0.493"
+        app:layout_constraintVertical_chainStyle="spread_inside">
 
-    <EditText
-        android:id="@+id/etPhoneNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Phone Number"
-        android:inputType="phone" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="15dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="@string/create_account"
+            android:textAlignment="viewStart"
+            android:textSize="24sp"/>
 
-    <Button
-        android:id="@+id/btnRegister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Register" />
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="@string/name"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_background"
+            android:hint="@string/enter_name"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="14dp"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:text="@string/phone_number"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/etPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_background"
+            android:hint="@string/enter_phone_number"
+            android:inputType="phone"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="14dp"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/register"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/loginText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:clickable="false"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="@string/already_have_a_account"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:paddingLeft="6dp"
+                android:text="@string/login"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
