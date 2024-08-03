@@ -6,7 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 
-class ImageAdapter(private val imageResId: Int) : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
+class ImageAdapter(private val imageResId: Int) :
+    RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
 
     inner class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView: ImageView = itemView.findViewById(R.id.imgBackground)

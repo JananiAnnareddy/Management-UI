@@ -33,18 +33,23 @@ class RegisterActivity : AppCompatActivity() {
             val phoneNumber = etPhoneNumber.text.toString()
 
             if (name.isNotEmpty() && phoneNumber.isNotEmpty()) {
-                val user = User(username = name, mobileNumber = phoneNumber)
+                val user = User(username = name, mobileNumber = phoneNumber, userType = "Admin")
 
                 CoroutineScope(Dispatchers.IO).launch {
                     userDao.insertUser(user)
                     runOnUiThread {
-                        Toast.makeText(this@RegisterActivity, "Registration Successful", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@RegisterActivity,
+                            "Registration Successful",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
                         finish()
                     }
                 }
             } else {
-                Toast.makeText(this@RegisterActivity, "Please enter all fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@RegisterActivity, "Please enter all fields", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 

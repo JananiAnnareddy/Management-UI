@@ -1,38 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
-    android:layout_height="300dp"
+    android:layout_height="wrap_content"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/etTaskTitle"
-        android:layout_width="0dp"
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Enter Task Title"
+        android:text="@string/add_task"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/spPriority"
+    <!-- Close Icon -->
+    <ImageView
+        android:id="@+id/ivClose"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:contentDescription="@string/close"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Task Input -->
+    <EditText
+        android:id="@+id/etTask"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:background="@drawable/button_background"
+        android:hint="@string/enter_task"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="9dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etTaskTitle" />
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
 
+    <!-- Priority Dropdown -->
+    <Spinner
+        android:id="@+id/spinnerPriority"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_background"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etTask" />
+
+    <!-- Add Button -->
     <Button
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Add Task"
+        android:layout_marginTop="24dp"
+        android:text="@string/add"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spPriority" />
+        app:layout_constraintTop_toBottomOf="@id/spinnerPriority" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

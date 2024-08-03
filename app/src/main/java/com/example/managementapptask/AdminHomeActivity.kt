@@ -1,13 +1,15 @@
 package com.example.managementapptask
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.GridLayout
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TableLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,12 +20,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import android.widget.TableRow
 
 class AdminHomeActivity : AppCompatActivity() {
 
     private lateinit var tvWelcome: TextView
     private lateinit var gridLayout: GridLayout
     private lateinit var recyclerView: RecyclerView
+    private lateinit var ivNoTasks: ImageView
     private lateinit var userDao: UserDao
     private lateinit var taskDao: TaskDao
 
@@ -38,9 +42,18 @@ class AdminHomeActivity : AppCompatActivity() {
         tvWelcome = findViewById(R.id.tvWelcome)
         recyclerView = findViewById(R.id.recyclerView)
         gridLayout = findViewById(R.id.gridLayout)
+        ivNoTasks = findViewById(R.id.ivNoTasks)
+
+        val btnLogout = findViewById<ImageButton>(R.id.btnLogout)
+        btnLogout.setOnClickListener {
+            logout()
+        }
+
 
         val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
         val userName = sharedPreferences.getString("USER_NAME", "User")
+        val adminID = sharedPreferences.getInt("USER_ID", 0)
+
         tvWelcome.text = "Welcome, $userName!"
 
         val fabAddUser = findViewById<FloatingActionButton>(R.id.fabAddUser)
@@ -49,101 +62,186 @@ class AdminHomeActivity : AppCompatActivity() {
             startActivityForResult(intent, USER_CREATION_REQUEST_CODE)
         }
 
+
         val db = AppDatabase.getDatabase(this)
         userDao = db.userDao()
         taskDao = db.taskDao()
 
         setupRecyclerView()
-        fetchAndDisplayUsers() // Fetch users without passing sample data
+        fetchAndDisplayTasks(adminID)
     }
 
     private fun setupRecyclerView() {
-        // Initialize ImageAdapter with your image resource ID
-        val imageResId = R.drawable.notasksimage // Replace with your actual image resource
+        val imageResId = R.drawable.notasksimage
         val imageAdapter = ImageAdapter(imageResId)
 
-        recyclerView.layoutManager = GridLayoutManager(this, 1) // Grid layout with 1 column for image
+        recyclerView.layoutManager = GridLayoutManager(this, 1)
         recyclerView.adapter = imageAdapter
-        Log.d("AdminHomeActivity", "RecyclerView setup with ImageAdapter.")
     }
 
-    private fun fetchAndDisplayUsers() {
+    private fun logout() {
+        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
+
+        Toast.makeText(this, "Logged out successfully", Toast.LENGTH_SHORT).show()
+
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun fetchAndDisplayTasks(adminId: Int) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val users = userDao.getAllUsers() // Replace with your actual method to get all users
+                val tasks = taskDao.getTasksForAdmin(adminId)
+                Log.d("AdminHomeActivity", "Fetched Tasks: $tasks")
+
                 withContext(Dispatchers.Main) {
-                    if (users.isNotEmpty()) {
-                        displayUsersInGrid(users)
+                    if (tasks.isNotEmpty()) {
+
+                        displayTasksInGrid(tasks, adminId)
+
+                        ivNoTasks.visibility = View.GONE
+                        recyclerView.visibility = View.GONE
+                        gridLayout.visibility = View.VISIBLE
                     } else {
-                        displayNoUsersFoundMessage()
+                        displayNoTasksFoundMessage()
+                        ivNoTasks.visibility = View.VISIBLE
+                        recyclerView.visibility = View.GONE
+                        gridLayout.visibility = View.GONE
                     }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                // Optionally, handle the error in a user-friendly way
-                showErrorFetchingUsersMessage()
+                withContext(Dispatchers.Main) {
+                    showErrorFetchingTasksMessage()
+                }
             }
         }
     }
 
-    private fun displayUsersInGrid(users: List<User>) {
+    private fun displayTasksInGrid(tasks: List<Task>, adminId: Int) {
         gridLayout.removeAllViews()
 
-        for (user in users) {
-            val textView = TextView(this)
-            textView.text = "Name: ${user.username}\nMobile: ${user.mobileNumber}"
-            textView.setPadding(16, 16, 16, 16)
-            textView.setBackgroundColor(resources.getColor(android.R.color.holo_blue_light))
-            textView.setTextColor(resources.getColor(android.R.color.white))
-            gridLayout.addView(textView)
+        val groupedTasks = tasks.groupBy { it.userId }
+
+        for ((userId, userTasks) in groupedTasks) {
+            val userName = userTasks.first().taskUserName
+            val taskCount = userTasks.size
+
+            val itemView = layoutInflater.inflate(R.layout.grid_item, gridLayout, false)
+
+            val tvName = itemView.findViewById<TextView>(R.id.tvName)
+            val tvTaskCount = itemView.findViewById<TextView>(R.id.tvTaskCount)
+            val editButton = itemView.findViewById<ImageButton>(R.id.editButton)
+            val deleteButton = itemView.findViewById<ImageButton>(R.id.deleteButton)
+
+            // Set the values for text and icon
+            tvName.text = userName
+            tvTaskCount.text = "Task Count: $taskCount"
+
+            editButton.setOnClickListener {
+                val intent = Intent(this, UserCreationActivity::class.java).apply {
+                    putExtra("USER_ID", userId) // Pass userId or other necessary data
+                }
+                startActivityForResult(intent, USER_CREATION_REQUEST_CODE)
+            }
+
+            deleteButton.setOnClickListener {
+                deleteUser(userId.toString(), adminId)
+            }
+
+            val layoutParams = GridLayout.LayoutParams().apply {
+                width = GridLayout.LayoutParams.MATCH_PARENT
+                height = GridLayout.LayoutParams.WRAP_CONTENT
+                setMargins(8, 8, 8, 8)
+            }
+
+            itemView.layoutParams = layoutParams
+            gridLayout.addView(itemView, layoutParams)
+
+            itemView.setOnLongClickListener {
+                showTaskDetailsPopup(userTasks)
+                true
+            }
         }
     }
 
-    private fun displayNoUsersFoundMessage() {
+    private fun deleteUser(userId: String, adminId: Int) {
+        val userIdInt = userId.toIntOrNull() ?: return // Convert to Int and handle invalid cases
+        CoroutineScope(Dispatchers.IO).launch {
+            taskDao.deleteTasksByUserId(userIdInt.toString())
+            userDao.deleteUserById(userIdInt.toString())
+            withContext(Dispatchers.Main) {
+                refreshGrid(adminId)
+            }
+        }
+    }
+
+    private fun refreshGrid(adminId: Int) {
+        fetchAndDisplayTasks(adminId)
+    }
+
+    private fun showTaskDetailsPopup(userTasks: List<Task>) {
+        // Inflate the popup layout
+        val dialogView = layoutInflater.inflate(R.layout.popup_task_details, null)
+        val builder = AlertDialog.Builder(this).setView(dialogView).setTitle("Task Details")
+            .setPositiveButton("Close") { dialog, _ -> dialog.dismiss() }
+
+        // Find the container for task details
+        val taskDetailsContainer = dialogView.findViewById<TableLayout>(R.id.tableLayout)
+
+        // Check if userTasks is not empty and log the size
+        if (userTasks.isEmpty()) {
+            Toast.makeText(this, "No tasks available", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        Log.d("TaskDetailsPopup", "Tasks: $userTasks")
+
+        for (task in userTasks) {
+            val tableRow = TableRow(this)
+
+            val taskName = TextView(this)
+            taskName.text = task.taskTitle
+            taskName.setPadding(8, 8, 8, 8)
+
+            val createdDate = TextView(this)
+            createdDate.text = task.createdDate
+            createdDate.setPadding(8, 8, 8, 8)
+
+            val priority = TextView(this)
+            priority.text = task.priority
+            priority.setPadding(8, 8, 8, 8)
+
+            tableRow.addView(taskName)
+            tableRow.addView(createdDate)
+            tableRow.addView(priority)
+
+            taskDetailsContainer.addView(tableRow)
+        }
+
+        // Create and show the dialog
+        builder.create().show()
+    }
+
+    private fun displayNoTasksFoundMessage() {
         Toast.makeText(this, "No users found.", Toast.LENGTH_SHORT).show()
     }
 
-    private fun showErrorFetchingUsersMessage() {
+    private fun showErrorFetchingTasksMessage() {
         Toast.makeText(this, "Error fetching users. Please try again.", Toast.LENGTH_SHORT).show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == USER_CREATION_REQUEST_CODE && resultCode == RESULT_OK) {
-            // Fetch and display users again after a new user is created
-            fetchAndDisplayUsers()
-        }
-    }
-}
-
-data class UserTaskDetails(val user: User, val tasks: List<Task>)
-
-class UserAdapter(private val userTaskDetails: MutableList<UserTaskDetails>) : RecyclerView.Adapter<UserAdapter.UserTaskViewHolder>() {
-
-    inner class UserTaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvUsername: TextView = itemView.findViewById(R.id.tvUsername)
-        private val tvTasks: TextView = itemView.findViewById(R.id.tvTasks)
-
-        fun bind(userTaskDetail: UserTaskDetails) {
-            tvUsername.text = userTaskDetail.user.username
-            tvTasks.text = userTaskDetail.tasks.joinToString { it.taskTitle }
+        if (requestCode == USER_CREATION_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+            val adminID = sharedPreferences.getInt("USER_ID", 0)
+            fetchAndDisplayTasks(adminID)
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserTaskViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_user_task, parent, false)
-        return UserTaskViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: UserTaskViewHolder, position: Int) {
-        holder.bind(userTaskDetails[position])
-    }
-
-    override fun getItemCount(): Int = userTaskDetails.size
-
-    fun setUserTaskDetails(details: List<UserTaskDetails>) {
-        userTaskDetails.clear()
-        userTaskDetails.addAll(details)
-        notifyDataSetChanged()
-    }
 }

@@ -94,7 +94,7 @@
         android:id="@+id/tvTaskCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tasks Count: 0"
+        android:text="@string/task_count"
         android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@id/btnAddTask"
         app:layout_constraintStart_toStartOf="parent"

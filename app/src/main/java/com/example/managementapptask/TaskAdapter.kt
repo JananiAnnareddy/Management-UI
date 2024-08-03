@@ -7,13 +7,16 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class TaskAdapter(private var tasks: List<Task>) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+class TaskAdapter(private var tasks: List<Task>) :
+    RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvTaskTitle: TextView = itemView.findViewById(R.id.tvTaskTitle)
         private val tvTaskPriority: TextView = itemView.findViewById(R.id.tvTaskPriority)
 
+
         fun bind(task: Task) {
+
             tvTaskTitle.text = task.taskTitle
             tvTaskPriority.text = task.priority
         }
@@ -36,3 +39,4 @@ class TaskAdapter(private var tasks: List<Task>) : RecyclerView.Adapter<TaskAdap
         notifyDataSetChanged()
     }
 }
+
