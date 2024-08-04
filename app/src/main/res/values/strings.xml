@@ -44,7 +44,7 @@
     <string name="close">Close</string>
     <string name="add_task">Add Task</string>
     <string name="select_due_date">Select Due Date</string>
-    <string name="click_to_select_date">Click to select date</string>
+    <string name="click_to_select_date">Select date</string>
     <string name="update_task_status">Update Task Status</string>
     <string name="status">Status:</string>
     <string name="date">Date</string>
@@ -54,20 +54,11 @@
     <string name="create_date">Created Date:</string>
 
 
-
     <string-array name="status_array">
         <item>Todo</item>
         <item>In Progress</item>
         <item>Completed</item>
     </string-array>
-
-
-
-
-
-
-
-
 
 
 </resources>

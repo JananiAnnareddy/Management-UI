@@ -2,6 +2,7 @@ package com.example.managementapptask
 
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -29,16 +30,12 @@ class LoginActivity : AppCompatActivity() {
         btnLogin = findViewById(R.id.btnLogin)
         btnRegister = findViewById(R.id.btnRegister)
 
-        // Initialize the database and userDao
         val db = AppDatabase.getDatabase(this)
         userDao = db.userDao()
 
-        // Set up listeners
         btnRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
-
-
 
         btnLogin.setOnClickListener {
             val name = etName.text.toString()
@@ -49,26 +46,23 @@ class LoginActivity : AppCompatActivity() {
                     val user = userDao.getUser(name, phoneNumber)
                     if (user != null) {
                         println("user---------------------------------- =$user")
-                        // Save the username using PreferenceHelper
-                        PreferenceHelper.saveUsername(this@LoginActivity, user.username)
-
-                        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-                        val editor = sharedPreferences.edit()
-                        editor.putString("USER_NAME", user.username)
-                        editor.putInt("USER_ID", user.id) // Store user ID
-                        editor.apply()
+                        saveCredentials(user.username, user.id)
+//                        PreferenceHelper.saveUsername(this@LoginActivity, user.username)
+//
+//                        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+//                        val editor = sharedPreferences.edit()
+//                        editor.putString("USER_NAME", user.username)
+//                        editor.putInt("USER_ID", user.id) // Store user ID
+//                        editor.apply()
                         if (user.userType == "Admin") {
                             val intent = Intent(this@LoginActivity, AdminHomeActivity::class.java)
                             intent.putExtra("USER_ID", user.id) // Pass user ID to the next activity
                             startActivity(intent)
                         } else {
-
                             val intent = Intent(this@LoginActivity, UserHomeActivity::class.java)
                             intent.putExtra("USER_ID", user.id) // Pass user ID to the next activity
                             startActivity(intent)
                         }
-
-
                         finish()
                     } else {
                         runOnUiThread {
@@ -83,6 +77,17 @@ class LoginActivity : AppCompatActivity() {
                     .show()
             }
         }
+
+
+    }
+
+    fun saveCredentials(username: String, userId: Int) {
+        PreferenceHelper.saveUsername(this@LoginActivity, username)
+        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("USER_NAME", username)
+        editor.putInt("USER_ID", userId) // Store user ID
+        editor.apply()
     }
 }
 

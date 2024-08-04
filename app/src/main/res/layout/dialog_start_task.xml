@@ -8,15 +8,18 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingBottom="10.dp"
         android:text="@string/select_due_date" />
 
     <TextView
         android:id="@+id/dueDateTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/darker_gray"
+        android:background="@drawable/button_background"
+
         android:clickable="true"
         android:hint="@string/click_to_select_date"
+        android:paddingTop="10dp"
         android:padding="8dp"
         android:textSize="16sp" />
 </LinearLayout>

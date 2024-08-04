@@ -1,6 +1,7 @@
 package com.example.managementapptask
 
 
+import PrioritySpinnerAdapter
 import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
@@ -73,8 +74,9 @@ class UserCreationActivity : AppCompatActivity() {
                         val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
                         val adminID = sharedPreferences.getInt("USER_ID", 0)
                         println("-------------------------$adminID")
+                        var isUserInserted: Boolean = false
                         if (isEditing) {
-                            // Update existing user
+                            isUserInserted = true
                             userDao.updateUser(
                                 User(
                                     userId!!, username, mobileNumber, userType = "User"
@@ -82,10 +84,9 @@ class UserCreationActivity : AppCompatActivity() {
                             )
                             taskDao.deleteTasksByUserId(userId!!.toString())
                         } else {
-                            // Insert new user
-
                             var user = userDao.getUserByPhoneNumber(mobileNumber)
                             if (user == null) {
+                                isUserInserted = true
                                 userId = userDao.insertUser(
                                     User(
                                         username = username,
@@ -94,6 +95,7 @@ class UserCreationActivity : AppCompatActivity() {
                                     )
                                 ).toInt()
                             } else {
+                                isUserInserted = false
                                 withContext(Dispatchers.Main) {
                                     Toast.makeText(
                                         this@UserCreationActivity,
@@ -105,36 +107,39 @@ class UserCreationActivity : AppCompatActivity() {
 
 
                         }
-                        tasks.forEach { task ->
-                            val (taskTitle, priority) = parseTask(task)
-                            val taskEntity = Task(
-                                userId = userId!!,
-                                taskUserName = username,
-                                phnnumber = mobileNumber,
-                                taskTitle = taskTitle,
-                                priority = priority,
-                                createdDate = getCurrentDateTime(),
-                                createBy = "$adminID",
-                                dueDate = "",
-                                taskStatus = "Todo"
-                            )
-                            taskDao.insertTask(taskEntity)
+                        if (isUserInserted) {
+                            tasks.forEach { task ->
+                                val (taskTitle, priority) = parseTask(task)
+                                val taskEntity = Task(
+                                    userId = userId!!,
+                                    taskUserName = username,
+                                    phnnumber = mobileNumber,
+                                    taskTitle = taskTitle,
+                                    priority = priority,
+                                    createdDate = getCurrentDateTime(),
+                                    createBy = "$adminID",
+                                    dueDate = "",
+                                    taskStatus = "Todo"
+                                )
+                                taskDao.insertTask(taskEntity)
+                            }
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(
+                                    this@UserCreationActivity,
+                                    "User and tasks ${if (isEditing) "updated" else "saved"} successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                setResult(Activity.RESULT_OK)
+                                finish()
+                            }
                         }
+
+                    } catch (e: Exception) {
+
                         withContext(Dispatchers.Main) {
                             Toast.makeText(
                                 this@UserCreationActivity,
-                                "User and tasks ${if (isEditing) "updated" else "saved"} successfully",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            setResult(Activity.RESULT_OK)
-                            finish()
-                        }
-                    } catch (e: Exception) {
-                        println("--------888888888--$e")
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(
-                                this@UserCreationActivity, "-----$e",
-                                //"Error saving data",
+                                "Data insertion failed. Please try again later.",
                                 Toast.LENGTH_LONG
                             ).show()
                         }
@@ -182,14 +187,23 @@ class UserCreationActivity : AppCompatActivity() {
         val spPriority = dialog.findViewById<Spinner>(R.id.spinnerPriority)
         val btnAdd = dialog.findViewById<Button>(R.id.btnAdd)
         val btnClose = dialog.findViewById<ImageView>(R.id.ivClose)
-        val priorities = arrayOf("Select Priority", "Low", "Medium", "High")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, priorities)
+
+        val priorities = listOf(
+            PrioritySpinnerAdapter.Priority(0, "Select Priority"),
+            PrioritySpinnerAdapter.Priority(R.drawable.ic_priority_low, "Low"),
+            PrioritySpinnerAdapter.Priority(R.drawable.ic_priority_medium, "Medium"),
+            PrioritySpinnerAdapter.Priority(R.drawable.ic_priority_high, "High")
+        )
+
+        val adapter = PrioritySpinnerAdapter(this, priorities)
         spPriority.adapter = adapter
         spPriority.setSelection(0)
+
         btnAdd.setOnClickListener {
             val taskTitle = etTaskTitle.text.toString()
-            val priority = spPriority.selectedItem.toString()
-            if (taskTitle.isNotEmpty() && priority != "Select Priority") {
+            val selectedPriorityPosition = spPriority.selectedItemPosition
+            if (taskTitle.isNotEmpty() && selectedPriorityPosition != 0) {
+                val priority = priorities[selectedPriorityPosition].text
                 tasksAdapter.addTask("$taskTitle ($priority)")
                 dialog.dismiss()
             } else {
@@ -198,11 +212,14 @@ class UserCreationActivity : AppCompatActivity() {
                 ).show()
             }
         }
+
         btnClose.setOnClickListener {
             dialog.dismiss()
         }
+
         dialog.show()
     }
+
 
     private fun updateTaskCount() {
         tvTaskCount.text = "Tasks Count: ${tasksAdapter.itemCount}"

@@ -37,7 +37,7 @@ class AdminHomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        setContentView(R.layout.activity_admin_home)
 
         tvWelcome = findViewById(R.id.tvWelcome)
         recyclerView = findViewById(R.id.recyclerView)
@@ -72,7 +72,7 @@ class AdminHomeActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        val imageResId = R.drawable.notasksimage
+        val imageResId = R.drawable.ic_no_tasks_image
         val imageAdapter = ImageAdapter(imageResId)
 
         recyclerView.layoutManager = GridLayoutManager(this, 1)

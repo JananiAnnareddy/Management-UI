@@ -112,17 +112,44 @@
 
         </LinearLayout>
 
-
-        <Button
-            android:id="@+id/startButton"
-            android:layout_width="135dp"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/tcStatus"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="196dp"
-            android:text="@string/start"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintTop_toBottomOf="@id/tcDue" />
+            android:orientation="horizontal"
+            android:paddingHorizontal="4sp"
+            android:paddingVertical="2sp"
+            app:layout_constraintTop_toBottomOf="@id/tcDue">
+
+            <TextView
+                android:id="@+id/cht"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="2dp"
+                android:text="Click here to"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/st"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingStart="8dp"
+                android:text="Start Task"
+                android:textColor="@color/colorAccent" />
+        </LinearLayout>
+
+        <!--        <Button-->
+        <!--            android:id="@+id/startButton"-->
+        <!--            android:layout_width="135dp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="4dp"-->
+        <!--            android:layout_marginEnd="196dp"-->
+        <!--            android:text="@string/start"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintHorizontal_chainStyle="packed"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/tcDue" />-->
 
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -131,8 +158,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingHorizontal="4sp"
-            android:paddingVertical="5sp"
-            app:layout_constraintTop_toBottomOf="@id/startButton">
+            android:paddingVertical="2sp"
+            app:layout_constraintTop_toBottomOf="@id/tcStatus">
 
             <TextView
                 android:id="@+id/statusLabel"

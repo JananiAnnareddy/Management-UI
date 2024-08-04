@@ -3,6 +3,7 @@ package com.example.managementapptask
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
+import android.window.OnBackInvokedDispatcher
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -58,4 +59,14 @@ class RegisterActivity : AppCompatActivity() {
             finish()
         }
     }
+
+//    override fun onBackPressed() {
+//        super.onBackPressed()
+//        // This will navigate back to the MainActivity
+//    }
+
+    override fun getOnBackInvokedDispatcher(): OnBackInvokedDispatcher {
+        return super.getOnBackInvokedDispatcher()
+    }
+
 }

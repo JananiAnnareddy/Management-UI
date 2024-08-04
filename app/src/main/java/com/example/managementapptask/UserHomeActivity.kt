@@ -8,12 +8,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +23,11 @@ import com.example.managementapptask.databinding.ActivityUserHomeBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import java.util.Locale
 
 class UserHomeActivity : AppCompatActivity() {
 
@@ -71,10 +73,6 @@ class UserHomeActivity : AppCompatActivity() {
     }
 
     private fun handleLogout() {
-//        // Clear user session or preferences
-//        PreferenceHelper.clearUserSession(this)
-
-        // Redirect to LoginActivity
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish() // Close the current activity
@@ -82,9 +80,8 @@ class UserHomeActivity : AppCompatActivity() {
 
 
     private fun setupRecyclerView() {
-        val imageResId = R.drawable.notasksimage
+        val imageResId = R.drawable.ic_no_tasks_image
         val imageAdapter = ImageAdapter(imageResId)
-
         userRecyclerView.layoutManager = GridLayoutManager(this, 1)
         userRecyclerView.adapter = imageAdapter
     }
@@ -148,11 +145,18 @@ class UserHomeActivity : AppCompatActivity() {
                 val dueDateLayout = taskName.findViewById<LinearLayout>(R.id.tcDue)
                 val taskStatus = taskView.findViewById<TextView>(R.id.statusValue)
                 val taskDueDate = taskView.findViewById<TextView>(R.id.tcDue2)
-                val startButton = taskView.findViewById<Button>(R.id.startButton)
+                val startButton = taskView.findViewById<TextView>(R.id.st)
 
                 taskName.text = task.taskTitle
                 when (task.taskStatus) {
                     "Completed" -> taskName.setTextColor(Color.GREEN)
+                }
+                if ((task.dueDate).toString().isNotEmpty()) {
+                    var result = isFirstDateEarlier(task.dueDate.toString(), getCurrentDateTime())
+                    when (result) {
+                        true -> taskName.setTextColor(Color.RED)
+                        false -> taskName.setTextColor(Color.BLACK)
+                    }
                 }
                 taskCreatedDate.text = task.createdDate
                 taskStatus.text = task.taskStatus
@@ -168,7 +172,11 @@ class UserHomeActivity : AppCompatActivity() {
                     dueDateLayout.visibility == View.INVISIBLE
                 }
 
-                startButton.setOnClickListener { showStartTaskPopup(task) }
+                startButton.setOnClickListener {
+                    if (task.dueDate.toString().isEmpty()) {
+                        showStartTaskPopup(task)
+                    }
+                }
 
                 taskStatus.setOnClickListener {
                     showTaskStatusUpdatePopup(task)
@@ -182,6 +190,23 @@ class UserHomeActivity : AppCompatActivity() {
             gridLayout.visibility = View.VISIBLE
             userRecyclerView.visibility = View.GONE
         }
+    }
+
+    fun isFirstDateEarlier(
+        firstDate: String, secondDate: String
+    ): Boolean {
+        val formatter = DateTimeFormatter.ofPattern(
+            "d/M/yyyy"
+        )
+        val date1 = LocalDate.parse(firstDate, formatter)
+        val date2 = LocalDate.parse(secondDate, formatter)
+        println("---------------------------$date1,$date2")
+        return date1.isBefore(date2)
+    }
+
+    private fun getCurrentDateTime(): String {
+        val formatter = SimpleDateFormat("d/M/YYYY", Locale.getDefault())
+        return formatter.format(Calendar.getInstance().time)
     }
 
     private fun showTaskStatusUpdatePopup(task: Task) {
@@ -200,9 +225,9 @@ class UserHomeActivity : AppCompatActivity() {
         // Create and show the AlertDialog
         val alertDialog =
             AlertDialog.Builder(this).setView(dialogView).setPositiveButton("Submit") { _, _ ->
-                    val newStatus = statusSpinner.selectedItem.toString()
-                    updateTaskStatus(task, newStatus)
-                }.setNegativeButton("Cancel", null).create()
+                val newStatus = statusSpinner.selectedItem.toString()
+                updateTaskStatus(task, newStatus)
+            }.setNegativeButton("Cancel", null).create()
 
         // Handle the close button click
         closeButton.setOnClickListener {
@@ -246,9 +271,9 @@ class UserHomeActivity : AppCompatActivity() {
         }
 
         AlertDialog.Builder(this).setView(dialogView).setPositiveButton("Submit") { _, _ ->
-                val dueDate = dueDateTextView.text.toString()
-                updateTaskDetails(task, dueDate)
-            }.setNegativeButton("Cancel", null).show()
+            val dueDate = dueDateTextView.text.toString()
+            updateTaskDetails(task, dueDate)
+        }.setNegativeButton("Cancel", null).show()
     }
 
 

@@ -26,7 +26,7 @@ class TaskUserAdapter(
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val taskTitle: TextView = itemView.findViewById(R.id.tn2)
         private val taskCreatedDate: TextView = itemView.findViewById(R.id.tcd2)
-        private val startButton: Button = itemView.findViewById(R.id.startButton)
+        private val startButton: TextView = itemView.findViewById(R.id.st)
 
         fun bind(task: Task) {
             taskTitle.text = task.taskTitle

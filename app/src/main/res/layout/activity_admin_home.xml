@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,10 +9,14 @@
     <!-- Full-screen ImageView for background -->
     <ImageView
         android:id="@+id/ivNoTasks"
-        android:layout_width="0dp"
+        android:layout_width="400dp"
         android:layout_height="0dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="140dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="100dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/notasksimage"
+        android:src="@drawable/ic_no_tasks_image"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,13 +50,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
             android:contentDescription="Logout"
             android:paddingRight="15dp"
-            app:tint="@android:color/white"
             android:src="@drawable/logout_btn"
-            android:clickable="true"/>
-
-
+            app:tint="@android:color/white" />
     </androidx.appcompat.widget.Toolbar>
 
     <!-- Welcome message -->
@@ -68,30 +69,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
-    <!-- RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/gridLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvWelcome" />
+        app:layout_constraintTop_toBottomOf="@id/tvWelcome">
 
-    <!-- GridLayout -->
-    <GridLayout
-        android:id="@+id/gridLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:columnCount="1"
-        android:rowCount="1"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recyclerView" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="4dp">
+
+            <!-- RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:visibility="gone" />
+
+            <!-- GridLayout -->
+            <GridLayout
+                android:id="@+id/gridLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:columnCount="1"
+                android:rowCount="1"
+                android:visibility="gone" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <!-- Floating Action Button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -102,5 +112,4 @@
         android:src="@drawable/add_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
