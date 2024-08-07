@@ -47,13 +47,6 @@ class LoginActivity : AppCompatActivity() {
                     if (user != null) {
                         println("user---------------------------------- =$user")
                         saveCredentials(user.username, user.id)
-//                        PreferenceHelper.saveUsername(this@LoginActivity, user.username)
-//
-//                        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-//                        val editor = sharedPreferences.edit()
-//                        editor.putString("USER_NAME", user.username)
-//                        editor.putInt("USER_ID", user.id) // Store user ID
-//                        editor.apply()
                         if (user.userType == "Admin") {
                             val intent = Intent(this@LoginActivity, AdminHomeActivity::class.java)
                             intent.putExtra("USER_ID", user.id) // Pass user ID to the next activity
@@ -77,8 +70,6 @@ class LoginActivity : AppCompatActivity() {
                     .show()
             }
         }
-
-
     }
 
     fun saveCredentials(username: String, userId: Int) {

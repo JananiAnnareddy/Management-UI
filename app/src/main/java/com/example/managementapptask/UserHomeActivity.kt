@@ -43,24 +43,25 @@ class UserHomeActivity : AppCompatActivity() {
         binding = ActivityUserHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Ensure the IDs match the layout file activity_user_home.xml
+
+
         userRecyclerView = binding.UserRecyclerView
         gridLayout = binding.UserGridLayout
         ivNoTasks = binding.ivNoUserTasks
 
-        // Get username from shared preferences
+
         val username = PreferenceHelper.getUsername(this) ?: "User"
         binding.UserTvWelcome.text = "Welcome, $username!"
 
-        // Set up RecyclerView
+
         taskUserAdapter = TaskUserAdapter(mutableListOf()) { task -> showStartTaskPopup(task) }
         userRecyclerView.layoutManager = LinearLayoutManager(this)
         userRecyclerView.adapter = taskUserAdapter
 
-        // Initialize Room database
+
         db = AppDatabase.getDatabase(this)
 
-        // Fetch tasks and update UI
+
         setupRecyclerView()
         fetchTasks(username)
 
@@ -182,11 +183,11 @@ class UserHomeActivity : AppCompatActivity() {
                     showTaskStatusUpdatePopup(task)
                 }
 
-                // Add the task view to GridLayout
+
                 gridLayout.addView(taskView)
             }
         } else {
-            // If no tasks, handle this case appropriately
+
             gridLayout.visibility = View.VISIBLE
             userRecyclerView.visibility = View.GONE
         }
@@ -210,26 +211,26 @@ class UserHomeActivity : AppCompatActivity() {
     }
 
     private fun showTaskStatusUpdatePopup(task: Task) {
-        // Inflate the custom layout for the dialog
+
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_update_status, null)
 
-        // Initialize Spinner and Close Button
+
         val statusSpinner = dialogView.findViewById<Spinner>(R.id.statusSpinner)
         val closeButton = dialogView.findViewById<ImageButton>(R.id.closeButton)
 
-        // Set the current status of the task in the Spinner
+
         val statusOptions = resources.getStringArray(R.array.status_array)
         val currentStatusIndex = statusOptions.indexOf(task.taskStatus)
         statusSpinner.setSelection(currentStatusIndex)
 
-        // Create and show the AlertDialog
+
         val alertDialog =
             AlertDialog.Builder(this).setView(dialogView).setPositiveButton("Submit") { _, _ ->
                 val newStatus = statusSpinner.selectedItem.toString()
                 updateTaskStatus(task, newStatus)
             }.setNegativeButton("Cancel", null).create()
 
-        // Handle the close button click
+
         closeButton.setOnClickListener {
             alertDialog.dismiss()
         }
@@ -264,7 +265,7 @@ class UserHomeActivity : AppCompatActivity() {
                 calendar.get(Calendar.DAY_OF_MONTH)
             )
 
-            // Set the minimum date to today
+
             datePickerDialog.datePicker.minDate = calendar.timeInMillis
 
             datePickerDialog.show()
@@ -281,7 +282,7 @@ class UserHomeActivity : AppCompatActivity() {
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 task.dueDate = dueDate
-//                task.taskStatus = priority
+
                 db.taskDao().updateTask(task)
             }
             fetchTasks(PreferenceHelper.getUsername(this@UserHomeActivity) ?: "User")

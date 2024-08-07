@@ -40,9 +40,7 @@ class RegisterActivity : AppCompatActivity() {
                     userDao.insertUser(user)
                     runOnUiThread {
                         Toast.makeText(
-                            this@RegisterActivity,
-                            "Registration Successful",
-                            Toast.LENGTH_SHORT
+                            this@RegisterActivity, "Registration Successful", Toast.LENGTH_SHORT
                         ).show()
                         startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
                         finish()
@@ -59,11 +57,6 @@ class RegisterActivity : AppCompatActivity() {
             finish()
         }
     }
-
-//    override fun onBackPressed() {
-//        super.onBackPressed()
-//        // This will navigate back to the MainActivity
-//    }
 
     override fun getOnBackInvokedDispatcher(): OnBackInvokedDispatcher {
         return super.getOnBackInvokedDispatcher()

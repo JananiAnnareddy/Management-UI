@@ -8,8 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class TaskUserAdapter(
-    private var tasks: MutableList<Task>,
-    private val onTaskStart: (Task) -> Unit
+    private var tasks: MutableList<Task>, private val onTaskStart: (Task) -> Unit
 ) : RecyclerView.Adapter<TaskUserAdapter.TaskViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {

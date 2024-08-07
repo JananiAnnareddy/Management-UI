@@ -8,26 +8,21 @@ import android.util.Log
 import android.view.View
 import android.widget.GridLayout
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TableLayout
+import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.managementapptask.databinding.ActivityAdminHomeBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import android.widget.TableRow
 
 class AdminHomeActivity : AppCompatActivity() {
 
-    private lateinit var tvWelcome: TextView
-    private lateinit var gridLayout: GridLayout
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var ivNoTasks: ImageView
+    private lateinit var binding: ActivityAdminHomeBinding
     private lateinit var userDao: UserDao
     private lateinit var taskDao: TaskDao
 
@@ -37,31 +32,23 @@ class AdminHomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_admin_home)
-
-        tvWelcome = findViewById(R.id.tvWelcome)
-        recyclerView = findViewById(R.id.recyclerView)
-        gridLayout = findViewById(R.id.gridLayout)
-        ivNoTasks = findViewById(R.id.ivNoTasks)
-
-        val btnLogout = findViewById<ImageButton>(R.id.btnLogout)
-        btnLogout.setOnClickListener {
-            logout()
-        }
-
+        binding = ActivityAdminHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
         val userName = sharedPreferences.getString("USER_NAME", "User")
         val adminID = sharedPreferences.getInt("USER_ID", 0)
 
-        tvWelcome.text = "Welcome, $userName!"
+        binding.tvWelcome.text = "Welcome, $userName!"
 
-        val fabAddUser = findViewById<FloatingActionButton>(R.id.fabAddUser)
-        fabAddUser.setOnClickListener {
+        binding.btnLogout.setOnClickListener {
+            logout()
+        }
+
+        binding.fabAddUser.setOnClickListener {
             val intent = Intent(this, UserCreationActivity::class.java)
             startActivityForResult(intent, USER_CREATION_REQUEST_CODE)
         }
-
 
         val db = AppDatabase.getDatabase(this)
         userDao = db.userDao()
@@ -75,8 +62,8 @@ class AdminHomeActivity : AppCompatActivity() {
         val imageResId = R.drawable.ic_no_tasks_image
         val imageAdapter = ImageAdapter(imageResId)
 
-        recyclerView.layoutManager = GridLayoutManager(this, 1)
-        recyclerView.adapter = imageAdapter
+        binding.recyclerView.layoutManager = GridLayoutManager(this, 1)
+        binding.recyclerView.adapter = imageAdapter
     }
 
     private fun logout() {
@@ -100,17 +87,16 @@ class AdminHomeActivity : AppCompatActivity() {
 
                 withContext(Dispatchers.Main) {
                     if (tasks.isNotEmpty()) {
-
                         displayTasksInGrid(tasks, adminId)
 
-                        ivNoTasks.visibility = View.GONE
-                        recyclerView.visibility = View.GONE
-                        gridLayout.visibility = View.VISIBLE
+                        binding.ivNoTasks.visibility = View.GONE
+                        binding.recyclerView.visibility = View.GONE
+                        binding.gridLayout.visibility = View.VISIBLE
                     } else {
                         displayNoTasksFoundMessage()
-                        ivNoTasks.visibility = View.VISIBLE
-                        recyclerView.visibility = View.GONE
-                        gridLayout.visibility = View.GONE
+                        binding.ivNoTasks.visibility = View.VISIBLE
+                        binding.recyclerView.visibility = View.GONE
+                        binding.gridLayout.visibility = View.GONE
                     }
                 }
             } catch (e: Exception) {
@@ -123,7 +109,7 @@ class AdminHomeActivity : AppCompatActivity() {
     }
 
     private fun displayTasksInGrid(tasks: List<Task>, adminId: Int) {
-        gridLayout.removeAllViews()
+        binding.gridLayout.removeAllViews()
 
         val groupedTasks = tasks.groupBy { it.userId }
 
@@ -131,14 +117,13 @@ class AdminHomeActivity : AppCompatActivity() {
             val userName = userTasks.first().taskUserName
             val taskCount = userTasks.size
 
-            val itemView = layoutInflater.inflate(R.layout.grid_item, gridLayout, false)
+            val itemView = layoutInflater.inflate(R.layout.grid_item, binding.gridLayout, false)
 
             val tvName = itemView.findViewById<TextView>(R.id.tvName)
             val tvTaskCount = itemView.findViewById<TextView>(R.id.tvTaskCount)
             val editButton = itemView.findViewById<ImageButton>(R.id.editButton)
             val deleteButton = itemView.findViewById<ImageButton>(R.id.deleteButton)
 
-            // Set the values for text and icon
             tvName.text = userName
             tvTaskCount.text = "Task Count: $taskCount"
 
@@ -160,7 +145,7 @@ class AdminHomeActivity : AppCompatActivity() {
             }
 
             itemView.layoutParams = layoutParams
-            gridLayout.addView(itemView, layoutParams)
+            binding.gridLayout.addView(itemView, layoutParams)
 
             itemView.setOnLongClickListener {
                 showTaskDetailsPopup(userTasks)
@@ -185,15 +170,13 @@ class AdminHomeActivity : AppCompatActivity() {
     }
 
     private fun showTaskDetailsPopup(userTasks: List<Task>) {
-        // Inflate the popup layout
+
         val dialogView = layoutInflater.inflate(R.layout.popup_task_details, null)
         val builder = AlertDialog.Builder(this).setView(dialogView).setTitle("Task Details")
             .setPositiveButton("Close") { dialog, _ -> dialog.dismiss() }
 
-        // Find the container for task details
         val taskDetailsContainer = dialogView.findViewById<TableLayout>(R.id.tableLayout)
 
-        // Check if userTasks is not empty and log the size
         if (userTasks.isEmpty()) {
             Toast.makeText(this, "No tasks available", Toast.LENGTH_SHORT).show()
             return
@@ -223,25 +206,15 @@ class AdminHomeActivity : AppCompatActivity() {
             taskDetailsContainer.addView(tableRow)
         }
 
-        // Create and show the dialog
-        builder.create().show()
+        val dialog = builder.create()
+        dialog.show()
     }
 
     private fun displayNoTasksFoundMessage() {
-        Toast.makeText(this, "No users found.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "No tasks found", Toast.LENGTH_SHORT).show()
     }
 
     private fun showErrorFetchingTasksMessage() {
-        Toast.makeText(this, "Error fetching users. Please try again.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Error fetching tasks", Toast.LENGTH_SHORT).show()
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == USER_CREATION_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-            val adminID = sharedPreferences.getInt("USER_ID", 0)
-            fetchAndDisplayTasks(adminID)
-        }
-    }
-
 }

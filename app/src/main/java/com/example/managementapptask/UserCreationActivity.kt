@@ -40,27 +40,32 @@ class UserCreationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_creation)
-        // Initialize views
+
+
         etUsername = findViewById(R.id.etUsername)
         etMobileNumber = findViewById(R.id.etMobileNumber)
         btnAddTask = findViewById(R.id.btnAddTask)
         btnSubmit = findViewById(R.id.btnSubmit)
         tvTaskCount = findViewById(R.id.tvTaskCount)
         rvTasks = findViewById(R.id.rvTasks)
-        // Setup RecyclerView
+
+
         rvTasks.layoutManager = LinearLayoutManager(this)
         rvTasks.adapter = tasksAdapter
-        // Initialize DAO
+
+
         val db = AppDatabase.getDatabase(this)
         userDao = db.userDao()
         taskDao = db.taskDao()
-        // Check if activity is in edit mode
+
+
         isEditing = intent.hasExtra("USER_ID")
         userId = intent.getIntExtra("USER_ID", -1)
         if (isEditing) {
             loadUserData(userId!!)
         }
-        // Set listeners
+
+
         btnAddTask.setOnClickListener {
             openAddTaskDialog()
         }
@@ -149,7 +154,7 @@ class UserCreationActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show()
             }
         }
-        // Update task count on data change
+
         tasksAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onChanged() {
                 super.onChanged()
