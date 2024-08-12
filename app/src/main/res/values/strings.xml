@@ -52,6 +52,8 @@
     <string name="due_datee">Due Date:</string>
     <string name="task_namee">Task Name:</string>
     <string name="create_date">Created Date:</string>
+    <string name="logout">Logout</string>
+    <string name="all">All</string>
 
 
     <string-array name="status_array">

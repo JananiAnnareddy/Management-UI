@@ -33,7 +33,7 @@
             android:layout_gravity="end"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="Logout"
+            android:contentDescription="@string/logout"
             android:paddingRight="15dp"
             android:src="@drawable/logout_btn"
             app:tint="@android:color/white" />

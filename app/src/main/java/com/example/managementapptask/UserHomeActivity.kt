@@ -76,7 +76,7 @@ class UserHomeActivity : AppCompatActivity() {
     private fun handleLogout() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
-        finish() // Close the current activity
+        finish()
     }
 
 

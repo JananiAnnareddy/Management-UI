@@ -18,13 +18,12 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
         Handler().postDelayed({
             sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-            val username = sharedPreferences.getString("USER_NAME", null)
             var userRole = sharedPreferences.getString("USER_ROLE", null)
-            if (userRole != null && userRole == "Admin") {
+            if (userRole == "Admin") {
                 val intent = Intent(this@SplashActivity, AdminHomeActivity::class.java)
                 startActivity(intent)
                 finish()
-            } else if (userRole != null && userRole == "User") {
+            } else if (userRole == "User") {
                 var intent = Intent(this@SplashActivity, UserHomeActivity::class.java)
                 startActivity(intent)
                 finish()

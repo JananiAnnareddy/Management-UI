@@ -237,7 +237,7 @@ class UserCreationActivity : AppCompatActivity() {
             val (taskTitle, priority) = matchResult.destructured
             Pair(taskTitle, priority)
         } else {
-            Pair("", "") // Or handle the error case as appropriate
+            Pair("", "")
         }
     }
 
